@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
-    <link rel="stylesheet" href="/static/adminStyle.css">
-    <link rel="icon" type="image/png" href="/static/favi.png" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/adminStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
 <h1>Admin</h1>

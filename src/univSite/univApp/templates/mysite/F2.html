@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>F2</title>
-    <link rel="stylesheet" href="/static/adminStyle.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/adminStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
 <h1>min/max/average salary of department</h1>
