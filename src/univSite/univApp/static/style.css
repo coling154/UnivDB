@@ -1,0 +1,33 @@
+*,
+*::before,
+*::after{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+:root {
+  --main-font: "Roboto", sans-serif;
+  --secondary-font: "Open Sans", sans-serif;
+  --body-font: "Open Sans", sans-serif;
+  --main-color: #000000;
+  --secondary-color: #ffffff;
+  --tertiary-color: #222222;
+}
+
+html {
+  font-family: var(--body-font);
+  font-size: 10px;
+  color: var(--main-color);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #fafafaf1;
+  height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+
