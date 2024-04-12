@@ -1,0 +1,56 @@
+from django.http import HttpResponse
+import mysql.connector
+
+from django.views.decorators.csrf import csrf_exempt
+
+
+
+def index(request):
+    form = '<!DOCTYPE html>'+\
+'<html>'+\
+'<body>'+\
+'<h1>Display Instructors who Earn More Than:</h1>'+\
+'<form action="instructors" method="post">'+\
+  '<label for="amount">$</label>'+\
+  '<input type="text" id="amount" name="amount"><br><br>'+\
+  '<input type="submit" value="Submit">'+\
+'</form>'+\
+'<p>Click on the submit button to submit the form.</p>'+\
+'</body>'+\
+'</html>'
+    return HttpResponse(form)
+
+def students(request):
+    return HttpResponse("Hello, students. \nAgain")
+
+@csrf_exempt
+def instructors(request):
+  mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd='mypassword', #"mypassword",
+  auth_plugin='mysql_native_password',
+  database="university",
+  )
+
+  mycursor = mydb.cursor()
+
+  amount=request.POST['amount']
+  print(amount)
+  mycursor.execute('select * from instructor where salary>'+amount)
+
+  data='<table style="width:400px">'
+  for (id, name, dept, salary) in mycursor:
+    r= ('<tr>'+ \
+            '<th>'+str(id)+'</th>'+\
+            '<th>'+name+'</th>'+\
+            '<th>'+dept+'</th>'+\
+            '<th>'+str(salary)+'</th>'+\
+            '</tr>')
+    data += r
+  data +='</table>'
+
+  mycursor.close()
+  mydb.close()
+
+  return HttpResponse("Hello, world. You're at the university index.\n"+data)

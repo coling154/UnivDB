@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+</head>
+<body>
+<h1>min/max/average salary of department</h1>
+
+<form action="{% url 'admin' %}" method="post">
+{% csrf_token %}
+  <label for="dept">department</label>
+  <input type="text" id="dept" name="department"><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
