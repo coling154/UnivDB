@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="/static/style.css">
-        <link rel="icon" type="image/png" href="/static/favi.png" />
-    </head>
-    <body>
-        <h1>Admin</h1>
-        <p>Landing page for admin users</p>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/adminStyle.css">
+    <link rel="icon" type="image/png" href="/static/favi.png" />
+</head>
+<body>
+<h1>Admin</h1>
+<p>Landing page for admin users</p>
+<ul>
+    <li><a href="{% url 'F1' %}">F1. Roster</a></li>
+    <li><a href="{% url 'F2' %}">F2. Salary</a></li>
+    <li><a href="{% url 'F3' %}">F3. Performance</a></li>
+</ul>
+
+</body>
 </html>
