@@ -9,13 +9,12 @@
 </head>
 <body>
 <h1>List Professors</h1>
-<!-- TODO add form action -->
-<form action=" ">
+<form action="{% url 'list_instructors' %}" method="post">
     <p>Order by</p>
     <div class="radio-group">
         <input type="radio" id="name_btn" name="order" value="name">
         <label for="name_btn">Name</label>
-        <input type="radio" id="dept_btn" name="order" value="department">
+        <input type="radio" id="dept_btn" name="order" value="dept_name">
         <label for="dept_btn">Department</label>
         <input type="radio" id="sal_btn" name="order" value="salary">
         <label for="sal_btn">Salary</label>
@@ -27,6 +26,7 @@
         <input type="radio" id="desc_btn" name="asc_desc" value="desc">
         <label for="desc_btn">Descending</label>
     </div><br>
+    {% csrf_token %}
     <input type="submit" value="Submit">
 </form>
 </body>
