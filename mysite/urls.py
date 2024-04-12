@@ -25,4 +25,5 @@ urlpatterns = [
     path('publication', views.publication, name='publication'),
     path('admin', views.admin, name='admin'),
     path('admin/', admin.site.urls),
+    path('department', views.department, name='department')
 ]

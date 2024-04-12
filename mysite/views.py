@@ -57,8 +57,9 @@ def instructors(request):
   amount=request.POST.get('amount', 0)
 
   cursor = connection.cursor()
+  query = "SELECT * FROM instructor WHERE salary >= %s"
   try:
-    cursor.execute("select id, name, course_id, sec_id, semester from Instructor join Teaches on id=teacher_id where year=2019")
+    cursor.execute(query, (amount,))
     data = dictfetchall(cursor)
   finally:
     cursor.close()
@@ -97,3 +98,16 @@ def admin(request):
         cursor.close()
 
     return HttpResponse(template.render(context, request))
+def department(request):
+
+    dept = request.POST.get('dept', 0)
+    query = "SELECT dept_name, MAX(salary) FROM instructor GROUP BY dept_name HAVING dept_name = %s"
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query, (dept, ))
+        data = dictfetchall(cursor)
+        print(data)
+    finally:
+        cursor.close()
+    return HttpResponse(data.__str__())
+
