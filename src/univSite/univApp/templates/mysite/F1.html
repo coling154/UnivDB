@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>F1. Roster</title>
 </head>
 <body>
-
+<h1>List Professors</h1>
+<!-- TODO add form action -->
+<form action=" ">
+    <p>Order by</p>
+    <input type="radio" id="name_btn" name="order" value="name">
+    <label for="name_btn">Name</label><br>
+    <input type="radio" id="dept_btn" name="order" value="department">
+    <label for="dept_btn">Department</label>
+    <br><input type="radio" id="sal_btn" name="order" value="salary">
+    <label for="sal_btn">Salary</label><br>
+    <p>Ascending or Descending</p>
+    <input type="radio" id="asc_btn" name="asc_desc" value="asc">
+    <label for="asc_btn">Ascending</label><br>
+    <input type="radio" id="desc_btn" name="asc_desc" value="desc">
+    <label for="desc_btn">Descending</label><br>
+    <br>
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>
