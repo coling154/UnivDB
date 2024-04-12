@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Display Instructors who Earn More Than:</h1>
+
+
+<form action="{% url 'instructors' %}" method="post">
+{% csrf_token %}
+  <label for="amount">$</label>
+  <input type="text" id="amount" name="amount"><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+<p>Click on the submit button to submit the form.</p>
+
+</body>
+</html>
