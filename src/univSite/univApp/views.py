@@ -41,5 +41,27 @@ def list_instructors(request):
 
 def F2(request):
     return render(request,"mysite/F2.html")
+
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def dept_stats(request):
+    dept = request.POST.get('department')
+    cursor = connection.cursor()
+
+    if(dept.lower() == 'all'):
+        query = f"SELECT dept_name, MIN(salary) AS min_salary, MAX(salary) AS max_salary, AVG(salary) AS average_salary FROM instructor GROUP BY dept_name"
+        cursor.execute(query)
+    else:
+        query = f"SELECT dept_name, MIN(salary) AS min_salary, MAX(salary) AS max_salary, AVG(salary) AS average_salary FROM instructor GROUP BY dept_name HAVING dept_name = %s"
+        cursor.execute(query, (dept,))
+    rows = cursor.fetchall()
+
+    # Convert query results to dictionary for easier template rendering
+    salarys = [
+        {"dept_name": row[0], "min": row[1], "max": row[2], "average": row[3]}
+        for row in rows
+    ]
+    return render(request, 'mysite/F2Table.html', {'rows': salarys})
 def F3(request):
     return render(request,"mysite/F3.html")
