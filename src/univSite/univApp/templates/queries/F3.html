@@ -19,11 +19,17 @@
     </ol>
 </div>
 <div>
-    <form action="{% url 'admin' %}" method="post">
-        <label for="name_txt">Name</label>
-        <input type="text" id="name_txt" name="name">
-        <label for="year_txt">Year</label>
-        <input type="text" id="year_txt" name="year"><br>
+    <form action="{% url 'prof_stats' %}" method="post">
+        <label for="name_text">Professor Name</label>
+        <input type="text" id="name_text" name="prof_name">
+        <label for="year_text">Year</label>
+        <input type="text" id="year_text" name="year">
+        <div class="radio-group">
+            <input type="radio" id="fa_btn" name="semester" value="1">
+            <label for="fa_btn">Fall semester</label>
+            <input type="radio" id="sp_btn" name="semester" value="2">
+            <label for="sp_btn">Spring semester</label>
+        </div>
         <input type="submit" value="Submit">
     </form>
 </div>

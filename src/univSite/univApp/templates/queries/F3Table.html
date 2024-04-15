@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professor</title>
+</head>
+<body>
+    <h1>Professor Stats</h1>
+    <table style="width:100%; border-collapse: collapse;" border="1">
+        <thead>
+            <tr>
+                <th>Course Sections Taught</th>
+                <th>Number of Students Taught</th>
+                <th>Funding Secured</th>
+                <th>Papers Published</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rows %}
+            <tr>
+                <td>{{ r.Sections_taught }}</td>
+                <td>{{ r.Students_taught }}</td>
+                <td>{{ r.amount_of_funding }}</td>
+                <td>{{ r.publications }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No data found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

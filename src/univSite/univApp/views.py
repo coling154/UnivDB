@@ -65,6 +65,27 @@ def dept_stats(request):
     return render(request, 'queries/F2Table.html', {'rows': salarys})
 def F3(request):
     return render(request,"queries/F3.html")
+@require_http_methods(["POST"])
+@csrf_exempt
+def prof_stats(request):
+    userIn = (request.POST.get("prof_name"), request.POST.get("year"), request.POST.get("semester"),)
+    cursor = connection.cursor()
+    query1 = f"SELECT COUNT(DISTINCT CONCAT(teaches.course_id, '-', teaches.sec_id)) AS Sections_taught, COUNT(DISTINCT takes.student_id) AS Students_taught FROM instructor i INNER JOIN teaches ON i.id = teaches.teacher_id INNER JOIN section ON teaches.course_id = section.course_id AND teaches.sec_id = section.sec_id AND teaches.semester = section.semester AND teaches.year = section.year INNER JOIN takes ON section.course_id = takes.course_id AND section.semester = takes.semester AND section.year = takes.year WHERE i.name = %s AND section.year = %s AND section.semester = %s GROUP BY i.id"
+    query2 = f"SELECT SUM(DISTINCT funds) AS amount_of_funding, count(DISTINCT title) as publications from publication INNER JOIN instructor on publication.instructorID = instructor.id WHERE name = %s AND YEAR = %s AND semester = %s"
+    cursor.execute(query1, userIn)
+    result1 = cursor.fetchall()
+    cursor.execute(query2, userIn)
+    result2 = cursor.fetchall()
+    if not result1 or not result2:
+        stats = {}  # Handle the case where no data is returned
+    else:
+        stats =[{
+            "Sections_taught": result1[0][0] if result1 else 0,
+            "Students_taught": result1[0][1] if result1 else 0,
+            "amount_of_funding": result2[0][0] if result2 else 0,
+            "publications": result2[0][1] if result2 else 0}
+            for row in range(1)]
+    return render(request, "queries/F3Table.html", {'rows': stats})
 
 def F4(request):
     return render(request,"queries/F4.html")
