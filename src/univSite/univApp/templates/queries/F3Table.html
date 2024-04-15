@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Professor</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/tableStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
-    <h1>Professor Stats</h1>
-    <table style="width:100%; border-collapse: collapse;" border="1">
+    <div class="container">
+    <table class="responsive-table">
+    <caption>Professor Performance</caption>
         <thead>
             <tr>
                 <th>Course Sections Taught</th>
@@ -18,10 +22,10 @@
         <tbody>
             {% for r in rows %}
             <tr>
-                <td>{{ r.Sections_taught }}</td>
-                <td>{{ r.Students_taught }}</td>
-                <td>{{ r.amount_of_funding }}</td>
-                <td>{{ r.publications }}</td>
+               <td scope="row" data-title="Sections Taught">{{ r.Sections_taught }}</td>
+                <td data-title="Students Taught">{{ r.Students_taught }}</td>
+                <td data-title="Amount of Funding">{{ r.amount_of_funding }}</td>
+                <td data-title="Number of Publications">{{ r.publications }}</td>
             </tr>
             {% empty %}
             <tr>
@@ -30,6 +34,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 </body>
 </html>
 
