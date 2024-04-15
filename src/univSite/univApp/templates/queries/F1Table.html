@@ -3,32 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>List of Instructors</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/tableStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+
 </head>
 <body>
-    <h1>List of Instructors</h1>
-    <table style="width:100%; border-collapse: collapse;" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Salary</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for instructor in rows %}
-            <tr>
-                <td>{{ instructor.id }}</td>
-                <td>{{ instructor.name }}</td>
-                <td>{{ instructor.dept_name }}</td>
-                <td>{{ instructor.salary }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No instructors found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <table class="responsive-table">
+            <caption>List of Instructors</caption>
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instructor in rows %}
+                <tr>
+                    <td scope="row" data-title="ID">{{ instructor.id }}</td>
+                    <td data-title="Name">{{ instructor.name }}</td>
+                    <td data-title="Department">{{ instructor.dept_name }}</td>
+                    <td data-title="Salary" type="currency">{{ instructor.salary }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No instructors found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

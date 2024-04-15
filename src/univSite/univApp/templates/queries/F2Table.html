@@ -3,33 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Department Stats</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/tableStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
-    <h1>Department Stats</h1>
-    <table style="width:100%; border-collapse: collapse;" border="1">
-        <thead>
-            <tr>
-                <th>Department</th>
-                <th>Min Salary</th>
-                <th>Max Salary</th>
-                <th>Average Salary</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for r in rows %}
-            <tr>
-                <td>{{ r.dept_name }}</td>
-                <td>{{ r.min }}</td>
-                <td>{{ r.max }}</td>
-                <td>{{ r.average }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No department found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <table class="responsive-table">
+            <caption>Department Stats</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Department</th>
+                    <th scope="col">Min Salary</th>
+                    <th scope="col">Max Salary</th>
+                    <th scope="col">Average Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td scope="row" data-title="Department">{{ r.dept_name }}</td>
+                    <td data-title="Min Salary">{{ r.min }}</td>
+                    <td data-title="Max Salary">{{ r.max }}</td>
+                    <td data-title="Average Salary">{{ r.average }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No department found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
 
