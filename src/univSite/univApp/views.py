@@ -49,7 +49,7 @@ def dept_stats(request):
     dept = request.POST.get('department')
     cursor = connection.cursor()
 
-    if(dept.lower() == 'all'):
+    if not dept:
         query = f"SELECT dept_name, MIN(salary) AS min_salary, MAX(salary) AS max_salary, AVG(salary) AS average_salary FROM instructor GROUP BY dept_name"
         cursor.execute(query)
     else:
