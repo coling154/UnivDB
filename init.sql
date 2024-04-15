@@ -1,8 +1,11 @@
-DROP DATABASE university;
+DROP DATABASE
+    university;
 
 create database
     university;
-use university;
+
+use
+    university;
 
 create table
     department(
@@ -303,3 +306,28 @@ VALUES
     ('05401', "EE468", "02", 2, 2019, "C"),
     ('05405', "EE468", "01", 1, 2020, "D"),
     ('98765', "EE468", "01", 1, 2020, "B");
+
+create table
+    publication(
+        instructorID varchar(5),
+        semester int,
+        year int,
+        title varchar(30),
+        funds DECIMAL(8, 2) not null,
+        primary key (instructorID, semester, year, title),
+        foreign key (instructorID) references instructor(id)
+    );
+
+insert into
+    publication
+VALUES
+    ('54545', 1, 2019, 'student reserch project', 15000),
+    ('21433', 2, 2019, 'sustanible water project', 20000),
+    ('54545', 2, 2019, 'ui/ux research', 11200),
+    ('21433', 2, 2019, 'plastic research', 21300),
+    ('28346', 1, 2020, 'student education reserch', 15141),
+    ('28345', 2, 2020, 'network reserch', 22340),
+    ('12371', 1, 2020, 'chair ergonomics', 21500),
+    ('05133', 2, 2020, 'accessibility reserch', 201310),
+    ('54545', 1, 2020, 'sustanibility reserch', 111110);
+
