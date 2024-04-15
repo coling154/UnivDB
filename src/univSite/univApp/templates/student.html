@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <title>Student</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
     <h1>Student</h1>
     <p>Landing page for student users</p>
+    <ul>
+        <li><a href="{% url 'F6' %}"><button class="button" id="item" role="button">F6: Course's Offered</button></a></li>
+    </ul>
+
 </body>
 </html>

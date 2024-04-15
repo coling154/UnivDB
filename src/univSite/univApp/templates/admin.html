@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>Admin</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/adminStyle.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
 <h1>Admin</h1>
 <p>Landing page for admin users</p>
 <ul>
-    <li><a href="{% url 'F1' %}">F1. Roster</a></li>
-    <li><a href="{% url 'F2' %}">F2. Salary</a></li>
-    <li><a href="{% url 'F3' %}">F3. Performance</a></li>
+    <li><a href="{% url 'F1' %}"><button class="button" id="item" role="button">F1: Roster</button></a></li>
+    <li><a href="{% url 'F2' %}"><button class="button" id="item" role="button">F2: Salary</button></a></li>
+    <li><a href="{% url 'F3' %}"><button class="button" id="item" role="button">F3: Performance</button></a></li>
 </ul>
 
 </body>

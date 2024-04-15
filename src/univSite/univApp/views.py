@@ -18,7 +18,7 @@ def student(request):
     return render(request, "student.html")
 
 def F1(request):
-    return render(request,"mysite/F1.html")
+    return render(request,"queries/F1.html")
 @require_http_methods(["POST"])
 @csrf_exempt
 def list_instructors(request):
@@ -37,10 +37,10 @@ def list_instructors(request):
         for row in rows
     ]
 
-    return render(request, 'mysite/F1Table.html', {'rows': instructors})
+    return render(request, 'queries/F1Table.html', {'rows': instructors})
 
 def F2(request):
-    return render(request,"mysite/F2.html")
+    return render(request,"queries/F2.html")
 
 
 @require_http_methods(["POST"])
@@ -62,6 +62,15 @@ def dept_stats(request):
         {"dept_name": row[0], "min": row[1], "max": row[2], "average": row[3]}
         for row in rows
     ]
-    return render(request, 'mysite/F2Table.html', {'rows': salarys})
+    return render(request, 'queries/F2Table.html', {'rows': salarys})
 def F3(request):
-    return render(request,"mysite/F3.html")
+    return render(request,"queries/F3.html")
+
+def F4(request):
+    return render(request,"queries/F4.html")
+
+def F5(request):
+    return render(request,"queries/F5.html")
+
+def F6(request):
+    return render(request,"queries/F6.html")

@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <title>Professor</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
-    <h1>Professor</h1>
-    <p>Landing page for professor users</p>
+<h1>Admin</h1>
+<p>Landing page for professors</p>
+<ul>
+    <li><a href="{% url 'F4' %}"><button class="button" id="item" role="button">F4: Semester Analysis</button></a></li>
+    <li><a href="{% url 'F5' %}"><button class="button" id="item" role="button">F5: Course Selection</button></a></li>
+</ul>
+
 </body>
 </html>
