@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>F3. Performance</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+</head>
+<body>
+<div>
+    <h1>Professor Performance</h1>
+    <p>Will Return</p>
+    <ol>
+        <li>The number of course sections taught during the semester</li>
+        <li>The Number of students taught</li>
+        <li>Amount of research funding obtained</li>
+        <li>Amount of papers the professor has published.</li>
+    </ol>
+</div>
+<div>
+    <form action="{% url 'admin' %}" method="post">
+        <label for="name_txt">Name</label>
+        <input type="text" id="name_txt" name="name">
+        <label for="year_txt">Year</label>
+        <input type="text" id="year_txt" name="year"><br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>
