@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="/static/style.css">
-        <link rel="icon" type="image/png" href="/static/favi.png" />
-    </head>
-    <body>
-        <div class="Main">
-            <div class="landing-flex">
-                <div class="inner">
-                    <a href="/admin"><button class="button" id="item" role="button" onclick="/admin">Admin</button></a>
-                    <a href="/professor"><button class="button" id="item" role="button">Professor</button></a>
-                    <a href="/student"><button class="button" id="item" role="button">Student</button></a>
-                </div>
-            </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+</head>
+<body>
+<div class="Main">
+    <div class="landing-flex">
+        <div class="inner">
+            <a href="{% url 'admin' %}"><button class="button" id="item" role="button">Admin</button></a>
+            <a href="{% url 'professor' %}"><button class="button" id="item" role="button">Professor</button></a>
+            <a href="{% url 'student' %}"><button class="button" id="item" role="button">Student</button></a>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>
