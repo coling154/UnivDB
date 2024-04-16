@@ -183,7 +183,7 @@ def sections(request):
     userIn = (request.POST.get("semester"), request.POST.get("year"), request.POST.get("id"),)
 
     cursor = connection.cursor()
-    query = (f"SELECT s.course_id, s.sec_id, s.semester, s.year, "
+    query = (f"SELECT DISTINCT s.course_id, ts.sec_id, s.semester, s.year, "
              f"(SELECT COUNT(t.student_id) FROM takes t "
              f"WHERE t.course_id = s.course_id AND t.sec_id = s.sec_id AND t.semester = s.semester AND t.year = s.year) "
              f"AS student_count FROM section s "
@@ -197,12 +197,12 @@ def sections(request):
         stats = {}  # Handle the case where no data is returned
     else:
         stats =[{
-            "course_id": results[0][0],
-            "sec_id": results[0][1],
-            "semester": results[0][2],
-            "year": results[0][3],
-            "student_count": results[0][4]}
-            for row in range(1)]
+            "course_id": row[0],
+            "sec_id": row[1],
+            "semester": row[2],
+            "year": row[3],
+            "student_count": row[4]}
+            for row in results]
     return render(request, "queries/F4Table.html", {'rows': stats})
 
 def F5(request):
@@ -210,6 +210,37 @@ def F5(request):
     This view is used to display F5.html template
     """
     return render(request,"queries/F5.html")
+
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def list_students(request):
+    """
+    FR5 Requirement
+    """
+    userIn = (request.POST.get("id"), request.POST.get("course"),
+              request.POST.get("section"), request.POST.get("year"), request.POST.get("semester"), )
+
+    cursor = connection.cursor()
+    query = (f"SELECT DISTINCT s.name, s.student_id, ta.grade "
+             f"FROM student s "
+             f"NATURAL JOIN takes ta "
+             f"NATURAL JOIN section sec "
+             f"NATURAL JOIN teaches t"
+             f" WHERE t.teacher_id = %s AND t.course_id = %s AND t.sec_id = %s AND t.year = %s AND t.semester = %s")
+    # execute the query
+    cursor.execute(query, userIn)
+    # get results
+    results = cursor.fetchall()
+    if not results:
+        stats = {}  # Handle the case where no data is returned
+    else:
+        stats =[{
+            "name": row[0],
+            "student_id": row[1],
+            "grade": row[2]}
+            for row in results]
+    return render(request, "queries/F5Table.html", {'rows': stats})
 
 def F6(request):
     """

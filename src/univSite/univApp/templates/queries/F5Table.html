@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Students</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/tableStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+</head>
+<body>
+    <div class="container">
+    <table class="responsive-table">
+    <caption>Students in Course</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rows %}
+            <tr>
+               <td scope="row" data-title="Name">{{ r.name }}</td>
+                <td data-title="Student ID">{{ r.student_id }}</td>
+                 <td data-title="Grade">{{ r.grade }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No data found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
+

@@ -19,9 +19,9 @@
 <div>
     <form action="{% url 'sections' %}" method="post">
         <label for="id_text">Instructor ID</label>
-        <input type="text" id="id_text" name="id">
+        <input type="number" id="id_text" name="id">
         <label for="year_text">Year</label>
-        <input type="text" id="year_text" name="year">
+        <input type="number" id="year_text" name="year">
         <div class="radio-group">
             <input type="radio" id="fa_btn" name="semester" value="1">
             <label for="fa_btn">Fall semester</label>

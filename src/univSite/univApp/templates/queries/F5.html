@@ -2,12 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>F5: Course Selection</title>
+    <title>F5. Students In Course</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
-    <h1>F5: Course Selection</h1>
+<div>
+    <h1>Students in Course Sections</h1>
+</div>
+<div>
+    <form action="{% url 'list_students' %}" method="post">
+        <label for="id_text">Instructor ID</label>
+        <input type="number" id="id_text" name="id">
+        <label for="course_text">Course Number</label>
+        <input type="text" id="course_text" name="course">
+        <label for="sec_text">Section Number</label>
+        <input type="text" id="sec_text" name="section">
+        <label for="year_text">Year</label>
+        <input type="number" id="year_text" name="year">
+        <div class="radio-group">
+            <input type="radio" id="fa_btn" name="semester" value="1">
+            <label for="fa_btn">Fall semester</label>
+            <input type="radio" id="sp_btn" name="semester" value="2">
+            <label for="sp_btn">Spring semester</label>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
 </body>
 </html>
