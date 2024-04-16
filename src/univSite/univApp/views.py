@@ -218,6 +218,10 @@ def F5(request):
 def list_students(request):
     """
     FR5 Requirement
+
+    Takes instructor id, course, section, year, and semester
+    Returns id, name, and grade of every student that took that
+    course and section with that instructor that semester and year
     """
     userIn = (request.POST.get("id"), request.POST.get("course"),
               request.POST.get("section"), request.POST.get("year"), request.POST.get("semester"), )
@@ -254,6 +258,11 @@ def F6(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def dep_courses(request):
+    """
+    F6 Requirement
+    Takes Department name, year, and semester
+    and returns a list of all courses and sections that semester
+    """
     userIn = ( request.POST.get("dept_name"),request.POST.get("year"), request.POST.get("semester"),)
 
     cursor = connection.cursor()
