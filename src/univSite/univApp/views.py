@@ -184,7 +184,7 @@ def sections(request):
 
     cursor = connection.cursor()
     query = (f"SELECT DISTINCT s.course_id, ts.sec_id, s.semester, s.year, "
-             f"(SELECT COUNT(t.student_id) FROM takes t "
+             f"(SELECT COUNT(DISTINCT t.student_id) FROM takes t "
              f"WHERE t.course_id = s.course_id AND t.sec_id = s.sec_id AND t.semester = s.semester AND t.year = s.year) "
              f"AS student_count FROM section s "
              f"NATURAL JOIN teaches ts "
@@ -193,6 +193,7 @@ def sections(request):
     cursor.execute(query, userIn)
     # get results
     results = cursor.fetchall()
+    cursor.close()
     if not results:
         stats = {}  # Handle the case where no data is returned
     else:
@@ -232,6 +233,7 @@ def list_students(request):
     cursor.execute(query, userIn)
     # get results
     results = cursor.fetchall()
+    cursor.close()
     if not results:
         stats = {}  # Handle the case where no data is returned
     else:
@@ -247,3 +249,31 @@ def F6(request):
     This view is used to display F6.html template
     """
     return render(request,"queries/F6.html")
+
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def dep_courses(request):
+    userIn = ( request.POST.get("dept_name"),request.POST.get("year"), request.POST.get("semester"),)
+
+    cursor = connection.cursor()
+
+    query = (f"SELECT c.course_id, c.title, s.sec_id "
+             f"FROM section s "
+             f"NATURAL JOIN course c "
+             f"NATURAL JOIN department d "
+             f"WHERE d.dept_name = %s AND s.year = %s AND s.semester = %s")
+    # execute the query
+    cursor.execute(query, userIn)
+    # save results
+    results = cursor.fetchall()
+    cursor.close()
+    if not results:
+        stats = {}  # Handle the case where no data is returned
+    else:
+        stats = [{
+            "course_id": row[0],
+            "title": row[1],
+            "sec_id": row[2]}
+            for row in results]
+    return render(request, "queries/F6Table.html", {'rows': stats})

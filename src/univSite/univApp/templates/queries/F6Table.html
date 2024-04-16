@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Department Stats</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/tableStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+</head>
+<body>
+    <div class="container">
+        <table class="responsive-table">
+            <caption>Department Courses</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Course Number</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Section</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td scope="row" data-title="Course Number">{{ r.course_id }}</td>
+                    <td data-title="Title">{{ r.title }}</td>
+                    <td data-title="Section">{{ r.sec_id }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No data found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

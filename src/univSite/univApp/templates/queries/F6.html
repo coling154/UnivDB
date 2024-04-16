@@ -2,12 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>F6: Course Selection</title>
+    <title>F6. Courses Offered by Department </title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
-    <h1>F6: Course's Offered</h1>
+<div>
+    <h1>Courses by department</h1>
+</div>
+<div>
+    <form action="{% url 'dep_courses' %}" method="post">
+        <label for="dpt_text">Department</label>
+        <input type="text" id="dpt_text" name="dept_name">
+        <label for="year_text">Year</label>
+        <input type="number" id="year_text" name="year">
+        <div class="radio-group">
+            <input type="radio" id="fa_btn" name="semester" value="1">
+            <label for="fa_btn">Fall semester</label>
+            <input type="radio" id="sp_btn" name="semester" value="2">
+            <label for="sp_btn">Spring semester</label>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
 </body>
 </html>

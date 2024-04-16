@@ -16,5 +16,6 @@ urlpatterns = [
     path("professor/F5/", views.F5, name="F5"),
     path("professor/F5/list_students/", views.list_students, name="list_students"),
     path("student/", views.student, name="student"),
-    path("student/F6/", views.F6, name="F6")
+    path("student/F6/", views.F6, name="F6"),
+    path("student/F6/list_course/", views.dep_courses, name="dep_courses")
 ]
