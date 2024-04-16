@@ -23,6 +23,11 @@ database table schema is in `init.sql`
 EER Diagram
 ![eer diagram](EER.PNG)
 
+To improve this design I would create a semester table which would have either the fall or the spring semester as well as 
+the year and any other information that can be attached to the university at a semester
+This would improve design since many tables have semester and year in their primary keys this can be changed to a foreign key with this table
+and Semester could be changed to an enumerated data type instead of 1 or 2
+
 ## How to start
 1. Create file `file.txt` in directory `UnivDB/univSite` in this file 
 include your root password for MySQL
