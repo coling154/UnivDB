@@ -121,7 +121,7 @@ def prof_stats(request):
     amount of funding secured, and the amount of papers the professor has published
 
     :param request: Http request object
-    :tye request: HttpRequest
+    :type request: HttpRequest
     """
     userIn = (request.POST.get("prof_name"), request.POST.get("year"), request.POST.get("semester"),)
     cursor = connection.cursor()
@@ -165,6 +165,45 @@ def F4(request):
     This view is used to display F4.html template
     """
     return render(request,"queries/F4.html")
+
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def sections(request):
+    """
+    FR4 Requirement
+
+    Given a professors name, semester, and year
+    return list of course sections with number of students in each
+
+    :param request: Http request object
+    :type request: HttpRequest
+    """
+    # get data
+    userIn = (request.POST.get("semester"), request.POST.get("year"), request.POST.get("id"),)
+
+    cursor = connection.cursor()
+    query = (f"SELECT s.course_id, s.sec_id, s.semester, s.year, "
+             f"(SELECT COUNT(t.student_id) FROM takes t "
+             f"WHERE t.course_id = s.course_id AND t.sec_id = s.sec_id AND t.semester = s.semester AND t.year = s.year) "
+             f"AS student_count FROM section s "
+             f"NATURAL JOIN teaches ts "
+             f"WHERE s.semester = %s AND s.year = %s AND ts.teacher_id = %s")
+    # Execute the query
+    cursor.execute(query, userIn)
+    # get results
+    results = cursor.fetchall()
+    if not results:
+        stats = {}  # Handle the case where no data is returned
+    else:
+        stats =[{
+            "course_id": results[0][0],
+            "sec_id": results[0][1],
+            "semester": results[0][2],
+            "year": results[0][3],
+            "student_count": results[0][4]}
+            for row in range(1)]
+    return render(request, "queries/F4Table.html", {'rows': stats})
 
 def F5(request):
     """

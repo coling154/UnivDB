@@ -2,12 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>F4: Semester Analysis</title>
+    <title>F4. Semester Analysis</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
 <body>
-    <h1>F4: Semester Analysis</h1>
+<div>
+    <h1>Semester Analysis</h1>
+    <p>Will Return</p>
+    <ol>
+        <li>The number of course sections taught during the chosen semester and year</li>
+        <li>The number of students taught in each section</li>
+    </ol>
+</div>
+<div>
+    <form action="{% url 'sections' %}" method="post">
+        <label for="id_text">Instructor ID</label>
+        <input type="text" id="id_text" name="id">
+        <label for="year_text">Year</label>
+        <input type="text" id="year_text" name="year">
+        <div class="radio-group">
+            <input type="radio" id="fa_btn" name="semester" value="1">
+            <label for="fa_btn">Fall semester</label>
+            <input type="radio" id="sp_btn" name="semester" value="2">
+            <label for="sp_btn">Spring semester</label>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
 </body>
 </html>

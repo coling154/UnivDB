@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Sections</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/tableStyle.css' %}"/>
+    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+</head>
+<body>
+    <div class="container">
+    <table class="responsive-table">
+    <caption>Course Sections</caption>
+        <thead>
+            <tr>
+                <th>Course number</th>
+                <th>Section number</th>
+                <th>Semester</th>
+                <th>Year</th>
+                <th># Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rows %}
+            <tr>
+               <td scope="row" data-title="Course Number">{{ r.course_id }}</td>
+                <td data-title="Section Number">{{ r.sec_id }}</td>
+                 <td data-title="Semester">{{ r.semester }}</td>
+                <td data-title="Year">{{ r.year }}</td>
+                <td data-title="# Students">{{ r.student_count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No data found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
+
