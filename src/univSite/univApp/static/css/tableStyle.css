@@ -6,6 +6,7 @@ html {
     box-sizing: inherit;
 }
 body {
+    background-color: #f4f4f4;
     font-family: "Open Sans", sans-serif;
     color: rgba(0, 0, 0, .87);
 }
