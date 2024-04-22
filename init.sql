@@ -1,11 +1,9 @@
 DROP DATABASE
     university;
 
-create database
-    university;
+create database university;
 
-use
-    university;
+use university;
 
 create table
     department(
@@ -306,6 +304,31 @@ VALUES
     ('05401', "EE468", "02", 2, 2019, "C"),
     ('05405', "EE468", "01", 1, 2020, "D"),
     ('98765', "EE468", "01", 1, 2020, "B");
+
+-- research( Title, dept_name, instructor_id, start, end date)
+CREATE TABLE research(
+    research_id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(60),
+    dept_name VARCHAR(32),
+    PI VARCHAR(5),
+    start_date DATE,
+    end_date DATE,
+    PRIMARY KEY (research_id),
+    FOREIGN KEY (PI) REFERENCES instructor(id) ON UPDATE CASCADE,
+    FOREIGN KEY (dept_name) REFERENCES department(dept_name) ON UPDATE CASCADE
+);
+-- funding(research_id, $funding, sponsor_org)
+CREATE TABLE funding(
+    research_id INT NOT NULL,
+    funding_amount INT,
+    sponsor_org VARCHAR(32),
+    FOREIGN KEY (research_id) REFERENCES research(research_id),
+    PRIMARY KEY (research_id, funding_amount, sponsor_org)
+);
+
+
+
+
 
 create table
     publication(
