@@ -307,17 +307,31 @@ VALUES
 
 -- research( Title, dept_name, instructor_id, start, end date)
 CREATE TABLE research(
-    research_id INT NOT NULL AUTO_INCREMENT,
+    research_id INT AUTO_INCREMENT,
     title VARCHAR(60),
     dept_name VARCHAR(32),
-    PI VARCHAR(5),
+    PI VARCHAR(32),
     start_date DATE,
     end_date DATE,
     PRIMARY KEY (research_id),
-    FOREIGN KEY (PI) REFERENCES instructor(id) ON UPDATE CASCADE,
-    FOREIGN KEY (dept_name) REFERENCES department(dept_name) ON UPDATE CASCADE
+    FOREIGN KEY (PI) REFERENCES instructor(name),
+    FOREIGN KEY (dept_name) REFERENCES department(dept_name)
 );
--- funding(research_id, $funding, sponsor_org)
+CREATE TABLE instructor_researches(
+    research_id INT,
+    instructor_id VARCHAR(5),
+    PRIMARY KEY (research_id, instructor_id),
+    FOREIGN KEY (research_id) REFERENCES research(research_id),
+    FOREIGN KEY (instructor_id) REFERENCES instructor(id)
+);
+CREATE TABLE student_researches(
+    research_id INT,
+    student_id VARCHAR(8),
+    PRIMARY KEY (research_id, student_id),
+    FOREIGN KEY (research_id) REFERENCES research(research_id),
+    FOREIGN KEY (student_id) REFERENCES student(student_id)
+);
+
 CREATE TABLE funding(
     research_id INT NOT NULL,
     funding_amount INT,
@@ -326,31 +340,28 @@ CREATE TABLE funding(
     PRIMARY KEY (research_id, funding_amount, sponsor_org)
 );
 
+CREATE TABLE publication(
+    publication_id INT AUTO_INCREMENT,
+    title VARCHAR(64),
+    publish_date DATE,
+    publisher_name VARCHAR(32),
+    research_id INT,
+    PRIMARY KEY (publication_id),
+    FOREIGN KEY (research_id) REFERENCES research(research_id)
+);
 
+CREATE TABLE student_publishes(
+    publication_id INT,
+    student_id VARCHAR(8),
+    PRIMARY KEY (publication_id, student_id),
+    FOREIGN KEY (publication_id) REFERENCES publication(publication_id),
+    FOREIGN KEY (student_id) REFERENCES student(student_id)
 
-
-
-create table
-    publication(
-        instructorID varchar(5),
-        semester int,
-        year int,
-        title varchar(30),
-        funds DECIMAL(8, 2) not null,
-        primary key (instructorID, semester, year, title),
-        foreign key (instructorID) references instructor(id)
-    );
-
-insert into
-    publication
-VALUES
-    ('54545', 1, 2019, 'student reserch project', 15000),
-    ('21433', 2, 2019, 'sustanible water project', 20000),
-    ('54545', 2, 2019, 'ui/ux research', 11200),
-    ('21433', 2, 2019, 'plastic research', 21300),
-    ('28346', 1, 2020, 'student education reserch', 15141),
-    ('28345', 2, 2020, 'network reserch', 22340),
-    ('12371', 1, 2020, 'chair ergonomics', 21500),
-    ('05133', 2, 2020, 'accessibility reserch', 201310),
-    ('54545', 1, 2020, 'sustanibility reserch', 111110);
-
+);
+CREATE TABLE instructor_publishes(
+    publication_id INT,
+    instructor_id VARCHAR(5),
+    PRIMARY KEY (publication_id, instructor_id),
+    FOREIGN KEY (publication_id) REFERENCES publication(publication_id),
+    FOREIGN KEY (instructor_id) REFERENCES instructor(id)
+);
