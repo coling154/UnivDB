@@ -310,26 +310,12 @@ CREATE TABLE research(
     research_id INT AUTO_INCREMENT,
     title VARCHAR(60),
     dept_name VARCHAR(32),
-    PI VARCHAR(32),
+    PI VARCHAR(5),
     start_date DATE,
     end_date DATE,
     PRIMARY KEY (research_id),
-    FOREIGN KEY (PI) REFERENCES instructor(name),
+    FOREIGN KEY (PI) REFERENCES instructor(id),
     FOREIGN KEY (dept_name) REFERENCES department(dept_name)
-);
-CREATE TABLE instructor_researches(
-    research_id INT,
-    instructor_id VARCHAR(5),
-    PRIMARY KEY (research_id, instructor_id),
-    FOREIGN KEY (research_id) REFERENCES research(research_id),
-    FOREIGN KEY (instructor_id) REFERENCES instructor(id)
-);
-CREATE TABLE student_researches(
-    research_id INT,
-    student_id VARCHAR(8),
-    PRIMARY KEY (research_id, student_id),
-    FOREIGN KEY (research_id) REFERENCES research(research_id),
-    FOREIGN KEY (student_id) REFERENCES student(student_id)
 );
 
 CREATE TABLE funding(
