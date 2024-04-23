@@ -363,3 +363,9 @@ CREATE TABLE instructor_publishes(
     FOREIGN KEY (publication_id) REFERENCES publication(publication_id),
     FOREIGN KEY (instructor_id) REFERENCES instructor(id)
 );
+CREATE TABLE user(
+    username VARCHAR(32),
+    pass VARCHAR(100),
+    perm_group INT,
+    PRIMARY KEY(username)
+);
