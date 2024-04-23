@@ -300,6 +300,7 @@ VALUES
     ('12345', "CS141", "01", 2, 2019, "C"),
     ('45678', "CS141", "01", 2, 2019, "F"),
     ('45678', "CS141", "02", 1, 2020, "B+"),
+    ('54321', "EE468", "02", 2, 2019, "B"),
     ('00128', "EE468", "01", 2, 2019, "A-"),
     ('05401', "EE468", "02", 2, 2019, "C"),
     ('05405', "EE468", "01", 1, 2020, "D"),
@@ -317,6 +318,9 @@ CREATE TABLE research(
     FOREIGN KEY (PI) REFERENCES instructor(id),
     FOREIGN KEY (dept_name) REFERENCES department(dept_name)
 );
+INSERT INTO research VALUES
+                         (1, 'User Authentication Biometrics', 'ECE', '12345', '2019-01-01', '2020-09-06'),
+                         (2, 'Best Password Research', 'ECE', '12345', '2019-08-26', '2020-02-07');
 
 CREATE TABLE funding(
     research_id INT NOT NULL,
@@ -325,6 +329,11 @@ CREATE TABLE funding(
     FOREIGN KEY (research_id) REFERENCES research(research_id),
     PRIMARY KEY (research_id, funding_amount, sponsor_org)
 );
+INSERT INTO funding VALUES
+                        (2, 13203, 'NASA'),
+                        (1, 2242, 'CIA'),
+                        (2, 100000, 'NSA'),
+                        (1, 3313, 'abc');
 
 CREATE TABLE publication(
     publication_id INT AUTO_INCREMENT,
@@ -335,6 +344,9 @@ CREATE TABLE publication(
     PRIMARY KEY (publication_id),
     FOREIGN KEY (research_id) REFERENCES research(research_id)
 );
+
+INSERT INTO publication VALUES
+                            (1, 'The Worlds BEST password!', '2020-02-07', 'Clarkson', 2);
 
 CREATE TABLE student_publishes(
     publication_id INT,
@@ -350,10 +362,4 @@ CREATE TABLE instructor_publishes(
     PRIMARY KEY (publication_id, instructor_id),
     FOREIGN KEY (publication_id) REFERENCES publication(publication_id),
     FOREIGN KEY (instructor_id) REFERENCES instructor(id)
-);
-CREATE TABLE user(
-    username VARCHAR(32),
-    pass VARCHAR(100),
-    perm_group INT,
-    PRIMARY KEY(username)
 );

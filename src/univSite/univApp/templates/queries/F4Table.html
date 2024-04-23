@@ -15,8 +15,6 @@
             <tr>
                 <th>Course number</th>
                 <th>Section number</th>
-                <th>Semester</th>
-                <th>Year</th>
                 <th># Students</th>
             </tr>
         </thead>
@@ -25,8 +23,6 @@
             <tr>
                <td scope="row" data-title="Course Number">{{ r.course_id }}</td>
                 <td data-title="Section Number">{{ r.sec_id }}</td>
-                 <td data-title="Semester">{{ r.semester }}</td>
-                <td data-title="Year">{{ r.year }}</td>
                 <td data-title="# Students">{{ r.student_count }}</td>
             </tr>
             {% empty %}

@@ -127,21 +127,26 @@ def prof_stats(request):
     :param request: Http request object
     :type request: HttpRequest
     """
-    userIn = (request.POST.get("prof_name"), request.POST.get("year"), request.POST.get("semester"),)
+    year = request.POST.get("year")
+    sem = request.POST.get("semester")
+    name = request.POST.get("prof_name")
+    userIn = (name, year, sem, )
+    dateStart, dateEnd = None, None
+    # spring sem
+    if int(sem) == 1:
+        dateStart = year + '-01-01'
+        dateEnd = year + '-05-31'
+    # fall sem
+    if int(sem) == 2:
+        dateStart = year + '-06-01'
+        dateEnd = year + '-12-31'
     cursor = connection.cursor()
-    # sections taught and how many students
-    query1 = (f"SELECT COUNT(DISTINCT CONCAT(teaches.course_id, '-', teaches.sec_id)) AS Sections_taught,"
-              f" COUNT(DISTINCT takes.student_id) AS Students_taught "
-              f"FROM instructor i "
-              f"INNER JOIN teaches ON i.id = teaches.teacher_id "
-              f"INNER JOIN section ON teaches.course_id = section.course_id AND teaches.sec_id = section.sec_id AND teaches.semester = section.semester AND teaches.year = section.year "
-              f"INNER JOIN takes ON section.course_id = takes.course_id AND section.semester = takes.semester AND section.year = takes.year "
-              f"WHERE i.name = %s AND section.year = %s AND section.semester = %s GROUP BY i.id")
-    
-    query2 = (f"SELECT SUM(DISTINCT funds) AS amount_of_funding, COUNT(DISTINCT title) AS publications "
-              f"FROM publication "
-              f"INNER JOIN instructor on publication.instructorID = instructor.id "
-              f"WHERE name = %s AND YEAR = %s AND semester = %s")
+    query1 = f"SELECT COUNT(sec_id) FROM teaches t INNER JOIN instructor i ON t.teacher_id = i.id WHERE i.name = %s AND t.year = %s AND t.semester = %s"
+    query2 = f"SELECT COUNT(DISTINCT takes.student_id) FROM takes INNER JOIN teaches ON takes.course_id = teaches.course_id AND takes.sec_id = teaches.sec_id INNER JOIN instructor ON teaches.teacher_id = instructor.id WHERE instructor.name = %s AND takes.year = %s AND takes.semester = %s"
+
+    in2 = (name, dateStart, dateEnd, )
+    query3 = f"SELECT SUM(f.funding_amount) from funding f NATURAL JOIN research r INNER JOIN instructor i ON r.PI = i.id WHERE i.name = %s AND r.end_date BETWEEN %s AND %s"
+    query4 = f"SELECT COUNT(ip.publication_id) FROM publication p NATURAL JOIN instructor_publishes ip INNER JOIN instructor i ON ip.instructor_id = i.id WHERE i.name = %s AND p.publish_date BETWEEN %s AND %s"
     # Execute the query1
     cursor.execute(query1, userIn)
     # save results of query1
@@ -150,6 +155,14 @@ def prof_stats(request):
     cursor.execute(query2, userIn)
     # save results of query2
     result2 = cursor.fetchall()
+    # Execute the query3
+    cursor.execute(query3, in2)
+    # save results of query3
+    result3 = cursor.fetchall()
+    # Execute the query4
+    cursor.execute(query4, in2)
+    # save results of query4
+    result4 = cursor.fetchall()
     # close cursor
     cursor.close()
     # if results are empty
@@ -158,9 +171,9 @@ def prof_stats(request):
     else:
         stats =[{
             "Sections_taught": result1[0][0] if result1 else 0,
-            "Students_taught": result1[0][1] if result1 else 0,
-            "amount_of_funding": result2[0][0] if result2 else 0,
-            "publications": result2[0][1] if result2 else 0}
+            "Students_taught": result2[0][0] if result2 else 0,
+            "amount_of_funding": result3[0][0] if result3 else 0,
+            "publications": result4[0][0] if result4 else 0}
             for row in range(1)]
     return render(request, "queries/F3Table.html", {'rows': stats})
 
@@ -187,8 +200,8 @@ def sections(request):
     userIn = (request.POST.get("semester"), request.POST.get("year"), request.POST.get("id"),)
 
     cursor = connection.cursor()
-    query = (f"SELECT DISTINCT s.course_id, ts.sec_id, s.semester, s.year, "
-             f"(SELECT COUNT(DISTINCT t.student_id) FROM takes t "
+    query = (f"SELECT DISTINCT s.course_id, ts.sec_id,(SELECT COUNT(DISTINCT t.student_id) "
+             f"FROM takes t "
              f"WHERE t.course_id = s.course_id AND t.sec_id = s.sec_id AND t.semester = s.semester AND t.year = s.year) "
              f"AS student_count FROM section s "
              f"NATURAL JOIN teaches ts "
@@ -204,9 +217,7 @@ def sections(request):
         stats =[{
             "course_id": row[0],
             "sec_id": row[1],
-            "semester": row[2],
-            "year": row[3],
-            "student_count": row[4]}
+            "student_count": row[2]}
             for row in results]
     return render(request, "queries/F4Table.html", {'rows': stats})
 
