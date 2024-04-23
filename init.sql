@@ -1,4 +1,4 @@
-DROP DATABASE
+if not exists DROP DATABASE
     university;
 
 create database university;
@@ -369,3 +369,8 @@ CREATE TABLE user(
     perm_group INT,
     PRIMARY KEY(username)
 );
+
+INSERT INTO user VALUES
+    ("admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", 1),
+    ("professor","17c1532ca6cff8f6a3a8200028af6c2580bf37f39e10cb0966e8a573e3b24a1f", 2),
+    ("student", "264c8c381bf16c982a4e59b0dd4c6f7808c51a05f64c35db42cc78a2a72875bb", 3);
