@@ -300,6 +300,7 @@ VALUES
     ('12345', "CS141", "01", 2, 2019, "C"),
     ('45678', "CS141", "01", 2, 2019, "F"),
     ('45678', "CS141", "02", 1, 2020, "B+"),
+    ('54321', "EE468", "02", 2, 2019, "B"),
     ('00128', "EE468", "01", 2, 2019, "A-"),
     ('05401', "EE468", "02", 2, 2019, "C"),
     ('05405', "EE468", "01", 1, 2020, "D"),
@@ -362,6 +363,6 @@ CREATE TABLE instructor_publishes(
     FOREIGN KEY (publication_id) REFERENCES publication(publication_id),
     FOREIGN KEY (instructor_id) REFERENCES instructor(id)
 );
-
+-- professor hou publishes report 1
 INSERT INTO instructor_publishes VALUES
                                      (1, 12345);

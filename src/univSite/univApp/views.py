@@ -159,7 +159,6 @@ def prof_stats(request):
     cursor.execute(query4, in2)
     # save results of query4
     result4 = cursor.fetchall()
-
     # close cursor
     cursor.close()
     # if results are empty
@@ -197,8 +196,8 @@ def sections(request):
     userIn = (request.POST.get("semester"), request.POST.get("year"), request.POST.get("id"),)
 
     cursor = connection.cursor()
-    query = (f"SELECT DISTINCT s.course_id, ts.sec_id, s.semester, s.year, "
-             f"(SELECT COUNT(DISTINCT t.student_id) FROM takes t "
+    query = (f"SELECT DISTINCT s.course_id, ts.sec_id,(SELECT COUNT(DISTINCT t.student_id) "
+             f"FROM takes t "
              f"WHERE t.course_id = s.course_id AND t.sec_id = s.sec_id AND t.semester = s.semester AND t.year = s.year) "
              f"AS student_count FROM section s "
              f"NATURAL JOIN teaches ts "
@@ -214,9 +213,7 @@ def sections(request):
         stats =[{
             "course_id": row[0],
             "sec_id": row[1],
-            "semester": row[2],
-            "year": row[3],
-            "student_count": row[4]}
+            "student_count": row[2]}
             for row in results]
     return render(request, "queries/F4Table.html", {'rows': stats})
 
