@@ -7,15 +7,19 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
 </head>
-<body>
-<div class="Main">
-    <div class="landing-flex">
-        <div class="inner">
-            <a href="{% url 'admin' %}"><button class="button" id="item" role="button">Admin</button></a>
-            <a href="{% url 'professor' %}"><button class="button" id="item" role="button">Professor</button></a>
-            <a href="{% url 'student' %}"><button class="button" id="item" role="button">Student</button></a>
+    <body>
+        <div class="Main">
+            <div class="landing-flex">
+               <div class="input">
+                    <form action="{% url 'login' %}" method='POST'>
+                        <label for="user" class="form-label">Enter Username and Password</label>
+                        <input type="text" name="user" placeholder="Username" required>
+                        
+                        <input class="form-input" placeholder="Password" type="password" name="pass" required>
+                        <button type="submit" class="button">Login</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-</body>
+    </body>
 </html>

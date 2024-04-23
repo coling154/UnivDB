@@ -1,11 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.db import connection
+import hashlib
+import re
 
 # Create your views here
 def index(request):
     return render(request, 'index.html')
+
+@csrf_exempt
 def admin(request):
     """
     This view is used to display admin.html landing page
@@ -286,3 +290,30 @@ def dep_courses(request):
             "sec_id": row[2]}
             for row in results]
     return render(request, "queries/F6Table.html", {'rows': stats})
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def login(request):
+    user, pwd = request.POST.get("user"), request.POST.get("pass")
+
+    pwd = hashlib.sha256(pwd.encode("utf-8")).hexdigest()
+
+    cursor = connection.cursor()
+
+    query = f'SELECT perm_group FROM user WHERE username="{user}" AND pass="{pwd}" LIMIT 1'
+
+    cursor.execute(query)
+
+    row = cursor.fetchone()
+
+    if row:
+        group = row[0]
+        if group == 1:
+            return redirect('admin')
+
+        elif group == 2:
+            return redirect('professor')
+        elif group == 3:
+            return redirect('student')
+    else: 
+        return redirect('index')
