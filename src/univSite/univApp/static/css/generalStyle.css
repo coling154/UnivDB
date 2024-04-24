@@ -41,7 +41,7 @@ form {
     margin-top: 20px;
 }
 
-input[type="text"], input[type="submit"]{
+input[type="text"], input[type="submit"], input[type="number"]{
     padding: 8px;
     margin: 10px 0;
 }
