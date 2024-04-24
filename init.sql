@@ -1,4 +1,4 @@
-if not exists DROP DATABASE
+DROP DATABASE IF EXISTS
     university;
 
 create database university;
