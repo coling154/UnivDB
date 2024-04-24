@@ -219,7 +219,7 @@ def prof_stats(request):
         "amount_of_funding": result3[0][0] if result3 else 0,
         "publications": result4[0][0] if result4 else 0}
         for row in range(1)]
-    return render(request, "queries/F3Table.html", {'rows': stats})
+    return render(request, "queries/F3Table.html", {'rows': stats, "group": group})
 
 def F4(request):
     """
