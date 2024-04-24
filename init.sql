@@ -307,27 +307,27 @@ VALUES
     ('98765', "EE468", "01", 1, 2020, "B");
 
 -- research( Title, dept_name, instructor_id, start, end date)
-CREATE TABLE research(
-    research_id INT AUTO_INCREMENT,
+CREATE TABLE project(
+    project_id INT AUTO_INCREMENT,
     title VARCHAR(60),
     dept_name VARCHAR(32),
     PI VARCHAR(5),
     start_date DATE,
     end_date DATE,
-    PRIMARY KEY (research_id),
+    PRIMARY KEY (project_id),
     FOREIGN KEY (PI) REFERENCES instructor(id),
     FOREIGN KEY (dept_name) REFERENCES department(dept_name)
 );
-INSERT INTO research VALUES
+INSERT INTO project VALUES
                          (1, 'User Authentication Biometrics', 'ECE', '12345', '2019-01-01', '2020-09-06'),
                          (2, 'Best Password Research', 'ECE', '12345', '2019-08-26', '2020-02-07');
 
 CREATE TABLE funding(
-    research_id INT NOT NULL,
+    project_id INT NOT NULL,
     funding_amount INT,
     sponsor_org VARCHAR(32),
-    FOREIGN KEY (research_id) REFERENCES research(research_id),
-    PRIMARY KEY (research_id, funding_amount, sponsor_org)
+    FOREIGN KEY (project_id) REFERENCES project(project_id),
+    PRIMARY KEY (project_id, funding_amount, sponsor_org)
 );
 INSERT INTO funding VALUES
                         (2, 13203, 'NASA'),
@@ -340,9 +340,9 @@ CREATE TABLE publication(
     title VARCHAR(64),
     publish_date DATE,
     publisher_name VARCHAR(32),
-    research_id INT,
+    project_id INT,
     PRIMARY KEY (publication_id),
-    FOREIGN KEY (research_id) REFERENCES research(research_id)
+    FOREIGN KEY (project_id) REFERENCES project(project_id)
 );
 
 INSERT INTO publication VALUES
@@ -363,6 +363,9 @@ CREATE TABLE instructor_publishes(
     FOREIGN KEY (publication_id) REFERENCES publication(publication_id),
     FOREIGN KEY (instructor_id) REFERENCES instructor(id)
 );
+insert into instructor_publishes value
+                                     (1, 12345);
+
 CREATE TABLE user(
     username VARCHAR(32),
     pass VARCHAR(100),

@@ -2,79 +2,24 @@ body {
     font-family: "Open Sans", sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
-    color: #333;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
-
-header, nav {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 20px;
+.container {
     text-align: center;
 }
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav ul li a {
+.alert {
+    background-color: #f44336;
     color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-h1 {
-    color: #333;
-}
-
-form {
-    background-color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
 }
-
-input[type="text"], input[type="submit"], input[type="number"]{
-    padding: 8px;
-    margin: 10px 0;
-}
-
-input[type="submit"] {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-label {
-    display: block;
-    margin-top: 20px;
-}
-.radio-group {
-    margin: 10px 0;
-}
-
-.radio-group label {
-    display: inline-block;
-    margin-right: 15px; /* Space between the radio button and label */
-}
-
-/* Optional: Style adjustments for better alignment and spacing */
-input[type="radio"] {
-    margin-right: 5px;
-}
-
 .button {
   align-items: center;
   background-color: #FFFFFF;

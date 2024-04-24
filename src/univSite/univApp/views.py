@@ -52,12 +52,21 @@ def list_instructors(request):
     :param request: Http request object
     :tye request: HttpRequest
     """
-    order_by = request.POST.get('order', 'name')  # Default sort by name
-    asc_desc = request.POST.get('asc_desc', 'asc')  # Default ascending
-    query = f"SELECT id, name, dept_name, salary FROM instructor ORDER BY %s %s"
+    order_by = request.POST.get('order')
+    asc_desc = request.POST.get('asc_desc').upper()
+    query = f"SELECT id, name, dept_name, salary FROM instructor ORDER BY {order_by} {asc_desc}"
     cursor = connection.cursor()
+
+    # validate asc_desc
+    if asc_desc not in ['ASC', 'DESC']:
+        asc_desc = 'ASC'
+
+    # validate order_by
+    if order_by not in ['name', 'dept_name', 'salary']:
+        order_by = 'name'
+
     # Execute the query
-    cursor.execute(query, (order_by, asc_desc,))
+    cursor.execute(query)
     rows = cursor.fetchall()
 
     # Convert query results to dictionary to render template
@@ -98,7 +107,8 @@ def dept_stats(request):
         cursor.execute(query)
     else:
         # select the requested department
-        query = f"SELECT dept_name, MIN(salary) AS min_salary, MAX(salary) AS max_salary, AVG(salary) AS average_salary FROM instructor GROUP BY dept_name HAVING dept_name = %s"
+        query = (f"SELECT dept_name, MIN(salary) AS min_salary, MAX(salary) AS max_salary, AVG(salary) AS average_salary "
+                 f"FROM instructor GROUP BY dept_name HAVING dept_name = %s")
         cursor.execute(query, (dept,))
     rows = cursor.fetchall()
 
@@ -136,52 +146,80 @@ def prof_stats(request):
     year = request.POST.get("year")
     sem = request.POST.get("semester")
     name = request.POST.get("prof_name")
-    userIn = (name, year, sem, )
-    dateStart, dateEnd = None, None
+    dateStart, dateEnd = None, None # initializing in function scope
     # spring sem
     if int(sem) == 1:
-        dateStart = year + '-01-01'
-        dateEnd = year + '-05-31'
+        dateStart = f"%s-01-01" % year
+        dateEnd = f"%s-05-31" % year
     # fall sem
     if int(sem) == 2:
-        dateStart = year + '-06-01'
-        dateEnd = year + '-12-31'
+        dateStart = f"%s-06-01" % year
+        dateEnd = f"%s-12-31" % year
     cursor = connection.cursor()
-    query1 = f"SELECT COUNT(sec_id) FROM teaches t INNER JOIN instructor i ON t.teacher_id = i.id WHERE i.name = %s AND t.year = %s AND t.semester = %s"
-    query2 = f"SELECT COUNT(DISTINCT takes.student_id) FROM takes INNER JOIN teaches ON takes.course_id = teaches.course_id AND takes.sec_id = teaches.sec_id INNER JOIN instructor ON teaches.teacher_id = instructor.id WHERE instructor.name = %s AND takes.year = %s AND takes.semester = %s"
 
-    in2 = (name, dateStart, dateEnd, )
-    query3 = f"SELECT SUM(f.funding_amount) from funding f NATURAL JOIN research r INNER JOIN instructor i ON r.PI = i.id WHERE i.name = %s AND r.end_date BETWEEN %s AND %s"
-    query4 = f"SELECT COUNT(ip.publication_id) FROM publication p NATURAL JOIN instructor_publishes ip INNER JOIN instructor i ON ip.instructor_id = i.id WHERE i.name = %s AND p.publish_date BETWEEN %s AND %s"
-    # Execute the query1
-    cursor.execute(query1, userIn)
-    # save results of query1
+    # data tuple for 3.1 and 3.2
+    tuple1 = (name, year, sem,)
+
+    # 3.1 # sections query
+    query = (f"SELECT COUNT(sec_id) FROM teaches t "
+              f"INNER JOIN instructor i ON t.teacher_id = i.id "
+              f"WHERE i.name = %s AND t.year = %s AND t.semester = %s")
+    # Execute the query
+    cursor.execute(query, tuple1)
+    # save results of query
     result1 = cursor.fetchall()
-    # Execute the query2
-    cursor.execute(query2, userIn)
-    # save results of query2
+
+    # 3.2 # students taught
+    query = (f"SELECT COUNT(DISTINCT takes.student_id) FROM takes "
+              f"INNER JOIN teaches ON takes.course_id = teaches.course_id AND takes.sec_id = teaches.sec_id "
+              f"INNER JOIN instructor ON teaches.teacher_id = instructor.id "
+              f"WHERE instructor.name = %s AND takes.year = %s AND takes.semester = %s")
+    # Execute the query
+    cursor.execute(query, tuple1)
+    # save results of query
     result2 = cursor.fetchall()
-    # Execute the query3
-    cursor.execute(query3, in2)
-    # save results of query3
+
+    # data tuple for 3.3, 3.4
+    tuple2 = (name, dateStart, dateEnd,)
+
+    # 3.3 funding query
+    query = (f"SELECT SUM(f.funding_amount) FROM funding f "
+              f"NATURAL JOIN project p "
+              f"INNER JOIN instructor i ON p.PI = i.id "
+              f"WHERE i.name = %s AND p.end_date BETWEEN %s AND %s")
+    # Execute the query
+    cursor.execute(query, tuple2)
+    # save results of query
     result3 = cursor.fetchall()
-    # Execute the query4
-    cursor.execute(query4, in2)
-    # save results of query4
+
+    # 3.4 # publications query
+    query = (f"SELECT COUNT(ip.publication_id) FROM publication p "
+              f"NATURAL JOIN instructor_publishes ip "
+              f"INNER JOIN instructor i ON ip.instructor_id = i.id "
+              f"WHERE i.name = %s AND p.publish_date BETWEEN %s AND %s")
+    # Execute the query
+    cursor.execute(query, tuple2)
+    # save results of query
     result4 = cursor.fetchall()
+
     # close cursor
     cursor.close()
     # if results are empty
-    if not result1 and not result2:
-        stats = {}  # Handle the case where no data is returned
-    else:
-        stats =[{
-            "Sections_taught": result1[0][0] if result1 else 0,
-            "Students_taught": result2[0][0] if result2 else 0,
-            "amount_of_funding": result3[0][0] if result3 else 0,
-            "publications": result4[0][0] if result4 else 0}
-            for row in range(1)]
-    return render(request, "queries/F3Table.html", {'rows': stats, 'group': group})
+    if not result1:
+        result1 = {}
+    if not result2:
+        result2 = {}
+    if not result3:
+        result3 = {}
+    if not result4:
+        result4 = {}
+    stats =[{
+        "Sections_taught": result1[0][0] if result1 else 0,
+        "Students_taught": result2[0][0] if result2 else 0,
+        "amount_of_funding": result3[0][0] if result3 else 0,
+        "publications": result4[0][0] if result4 else 0}
+        for row in range(1)]
+    return render(request, "queries/F3Table.html", {'rows': stats})
 
 def F4(request):
     """
@@ -203,17 +241,18 @@ def sections(request):
     :type request: HttpRequest
     """
     # get data
-    userIn = (request.POST.get("semester"), request.POST.get("year"), request.POST.get("id"),)
-
+    sem = request.POST.get("semester")
+    year = request.POST.get("year")
+    id = request.POST.get("id")
     cursor = connection.cursor()
     query = (f"SELECT DISTINCT s.course_id, ts.sec_id,(SELECT COUNT(DISTINCT t.student_id) "
              f"FROM takes t "
              f"WHERE t.course_id = s.course_id AND t.sec_id = s.sec_id AND t.semester = s.semester AND t.year = s.year) "
              f"AS student_count FROM section s "
              f"NATURAL JOIN teaches ts "
-             f"WHERE s.semester = %s AND s.year = %s AND ts.teacher_id = %s")
+             f"WHERE s.semester = {sem} AND s.year = {year} AND ts.teacher_id = {id}")
     # Execute the query
-    cursor.execute(query, userIn)
+    cursor.execute(query)
     # get results
     results = cursor.fetchall()
     cursor.close()
@@ -244,9 +283,12 @@ def list_students(request):
     Returns id, name, and grade of every student that took that
     course and section with that instructor that semester and year
     """
-    userIn = (request.POST.get("id"), request.POST.get("course"),
-              request.POST.get("section"), request.POST.get("year"), request.POST.get("semester"), )
-
+    id = request.POST.get("id")
+    course = request.POST.get("course")
+    section = request.POST.get("section")
+    year = request.POST.get("year")
+    sem = request.POST.get("semester")
+    tuple1 = (id, course, section, year, sem)
     cursor = connection.cursor()
     query = (f"SELECT DISTINCT s.name, s.student_id, ta.grade "
              f"FROM student s "
@@ -255,7 +297,7 @@ def list_students(request):
              f"NATURAL JOIN teaches t"
              f" WHERE t.teacher_id = %s AND t.course_id = %s AND t.sec_id = %s AND t.year = %s AND t.semester = %s")
     # execute the query
-    cursor.execute(query, userIn)
+    cursor.execute(query, tuple1)
     # get results
     results = cursor.fetchall()
     cursor.close()
@@ -284,8 +326,10 @@ def dep_courses(request):
     Takes Department name, year, and semester
     and returns a list of all courses and sections that semester
     """
-    userIn = ( request.POST.get("dept_name"),request.POST.get("year"), request.POST.get("semester"),)
-
+    dept_name = request.POST.get("dept_name")
+    year = request.POST.get("year")
+    sem = request.POST.get("semester")
+    tuple1 = (dept_name, year, sem,)
     cursor = connection.cursor()
 
     query = (f"SELECT c.course_id, c.title, s.sec_id "
@@ -294,7 +338,7 @@ def dep_courses(request):
              f"NATURAL JOIN department d "
              f"WHERE d.dept_name = %s AND s.year = %s AND s.semester = %s")
     # execute the query
-    cursor.execute(query, userIn)
+    cursor.execute(query, tuple1)
     # save results
     results = cursor.fetchall()
     cursor.close()
@@ -320,7 +364,8 @@ def login(request):
 
     cursor = connection.cursor()
 
-    query = f'SELECT perm_group FROM user WHERE username="{user}" AND pass="{pwd}" LIMIT 1'
+    query = (f'SELECT perm_group FROM user '
+             f'WHERE username="{user}" AND pass="{pwd}" LIMIT 1')
 
     cursor.execute(query)
 
