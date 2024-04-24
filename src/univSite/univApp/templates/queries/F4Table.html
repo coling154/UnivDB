@@ -35,4 +35,21 @@
     </div>
 </body>
 </html>
-
+{% else %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Permission Denied</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/alert.css' %}"/>
+        <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="alert">
+                <strong>Access Denied!</strong> You do not have permission to access this page.
+            </div>
+            <a href="{% if group == 1%} {% url 'admin' %} {% elif group == 3%} {%url 'student'%} {% else %} {% url 'index' %}{% endif %}" class="button">Return Home</a>
+        </div>
+    </body>
+{% endif %}
+</html>

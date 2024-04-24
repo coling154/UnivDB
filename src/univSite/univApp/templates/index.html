@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HomePage</title>
+    <title>Login</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
     <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
@@ -18,6 +18,9 @@
                         <input class="form-input" placeholder="Password" type="password" name="pass" required>
                         <button type="submit" class="button">Login</button>
                     </form>
+                    {% if error %}
+                    <h3><strong id="alert">Wrong username or password!</strong></h3>
+                    {% endif %}
                 </div>
             </div>
         </div>

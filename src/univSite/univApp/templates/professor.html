@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Professor</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
-    <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
-</head>
-<body>
-<h1>Professor</h1>
-<p>Landing page for professors</p>
-<ul>
-    <li><a href="{% url 'F4' %}"><button class="button" id="item" role="button">F4: Semester Analysis</button></a></li>
-    <li><a href="{% url 'F5' %}"><button class="button" id="item" role="button">F5: Course Selection</button></a></li>
-</ul>
+{% if group == 2 %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Home</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/generalStyle.css' %}"/>
+        <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+    </head>
+    <body>
+        <h1>Professor</h1>
+        <p>Landing page for professors</p>
+        <ul>
+            <li><a href="{% url 'F4' %}"><button class="button" id="item" role="button">F4: Semester Analysis</button></a></li>
+            <li><a href="{% url 'F5' %}"><button class="button" id="item" role="button">F5: Course Selection</button></a></li>
+        </ul>
 
-</body>
+    </body>
+{% else %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Permission Denied</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/alert.css' %}"/>
+        <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="alert">
+                <strong>Access Denied!</strong> You do not have permission to access this page.
+            </div>
+            <a href="{% if group == 1%} {% url 'admin' %} {% elif group == 3%} {%url 'student'%} {% else %} {% url 'index' %}{% endif %}" class="button">Return Home</a>
+        </div>
+    </body>
+{% endif %}
 </html>

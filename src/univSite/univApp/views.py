@@ -5,34 +5,40 @@ from django.db import connection
 import hashlib
 import re
 
+error = 0
+group = 0
+
 # Create your views here
 def index(request):
-    return render(request, 'index.html')
+    if error:
+        return render(request, 'index.html', {'error': error})
+    else:
+        return render(request, 'index.html')
 
 @csrf_exempt
 def admin(request):
     """
     This view is used to display admin.html landing page
     """
-    return render(request, "admin.html")
+    return render(request, "admin.html", {"group": group})
 
 def professor(request):
     """
     This view is used to display professor.html landing page
     """
-    return render(request, "professor.html")
+    return render(request, "professor.html", {"group": group})
 
 def student(request):
     """
     This view is used to display student.html landing page
     """
-    return render(request, "student.html")
+    return render(request, "student.html", {"group": group})
 
 def F1(request):
     """
     This view is used to display F1.html template
     """
-    return render(request,"queries/F1.html")
+    return render(request,"queries/F1.html", {"group": group})
 @require_http_methods(["POST"])
 @csrf_exempt
 def list_instructors(request):
@@ -60,13 +66,13 @@ def list_instructors(request):
         for row in rows
     ]
 
-    return render(request, 'queries/F1Table.html', {'rows': instructors})
+    return render(request, 'queries/F1Table.html', {'rows': instructors, 'group': group})
 
 def F2(request):
     """
     This view is used to display F2.html template
     """
-    return render(request,"queries/F2.html")
+    return render(request,"queries/F2.html", {"group": group})
 
 
 @require_http_methods(["POST"])
@@ -101,14 +107,14 @@ def dept_stats(request):
         {"dept_name": row[0], "min": row[1], "max": row[2], "average": row[3]}
         for row in rows
     ]
-    return render(request, 'queries/F2Table.html', {'rows': salarys})
+    return render(request, 'queries/F2Table.html', {'rows': salarys, 'group': group})
 
 
 def F3(request):
     """
     This view is used to display F3.html template
     """
-    return render(request,"queries/F3.html")
+    return render(request,"queries/F3.html", {"group": group})
 
 
 @require_http_methods(["POST"])
@@ -175,13 +181,13 @@ def prof_stats(request):
             "amount_of_funding": result3[0][0] if result3 else 0,
             "publications": result4[0][0] if result4 else 0}
             for row in range(1)]
-    return render(request, "queries/F3Table.html", {'rows': stats})
+    return render(request, "queries/F3Table.html", {'rows': stats, 'group': group})
 
 def F4(request):
     """
     This view is used to display F4.html template
     """
-    return render(request,"queries/F4.html")
+    return render(request,"queries/F4.html", {"group": group})
 
 
 @require_http_methods(["POST"])
@@ -219,13 +225,13 @@ def sections(request):
             "sec_id": row[1],
             "student_count": row[2]}
             for row in results]
-    return render(request, "queries/F4Table.html", {'rows': stats})
+    return render(request, "queries/F4Table.html", {'rows': stats, 'group': group})
 
 def F5(request):
     """
     This view is used to display F5.html template
     """
-    return render(request,"queries/F5.html")
+    return render(request,"queries/F5.html", {"group": group})
 
 
 @require_http_methods(["POST"])
@@ -261,13 +267,13 @@ def list_students(request):
             "student_id": row[1],
             "grade": row[2]}
             for row in results]
-    return render(request, "queries/F5Table.html", {'rows': stats})
+    return render(request, "queries/F5Table.html", {'rows': stats, 'group': group})
 
 def F6(request):
     """
     This view is used to display F6.html template
     """
-    return render(request,"queries/F6.html")
+    return render(request,"queries/F6.html", {'group': group})
 
 
 @require_http_methods(["POST"])
@@ -300,11 +306,14 @@ def dep_courses(request):
             "title": row[1],
             "sec_id": row[2]}
             for row in results]
-    return render(request, "queries/F6Table.html", {'rows': stats})
+    return render(request, "queries/F6Table.html", {'rows': stats, 'group': group})
 
 @require_http_methods(["POST"])
 @csrf_exempt
 def login(request):
+    global error
+    global group
+
     user, pwd = request.POST.get("user"), request.POST.get("pass")
 
     pwd = hashlib.sha256(pwd.encode("utf-8")).hexdigest()
@@ -318,13 +327,19 @@ def login(request):
     row = cursor.fetchone()
 
     if row:
-        group = row[0]
-        if group == 1:
+        pGroup = row[0]
+        error = 0
+        if pGroup == 1:
+            group = 1 
             return redirect('admin')
 
-        elif group == 2:
+        elif pGroup == 2:
+            group = 2
             return redirect('professor')
-        elif group == 3:
+
+        elif pGroup == 3:
+            group = 3
             return redirect('student')
     else: 
+        error = 1
         return redirect('index')

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% if group == 1 %}
 <head>
     <meta charset="UTF-8">
     <title>F2. Salary</title>
@@ -17,4 +18,21 @@
 </form>
 
 </body>
+{% else %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Permission Denied</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/alert.css' %}"/>
+        <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="alert">
+                <strong>Access Denied!</strong> You do not have permission to access this page.
+            </div>
+            <a href="{% if group == 2%} {% url 'professor' %} {% elif group == 3%} {%url 'student'%} {% else %} {% url 'index' %}{% endif %}" class="button">Return Home</a>
+        </div>
+    </body>
+{% endif %}
 </html>

@@ -18,6 +18,11 @@ body {
   height: 100vh;
 }
 
+#alert {
+  margin-top: 15px;
+  color: #ff1a1a;
+}
+
 .landing-flex {
   background-color: #454545;
   border-radius: 8px;
