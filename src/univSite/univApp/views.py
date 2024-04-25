@@ -94,7 +94,7 @@ def F2(request):
     return render(request,"queries/F2.html", {"group": group})
 
 
-@require_http_methods(["POST"])
+@require_http_methods(["GET", "POST"])
 @csrf_exempt
 def dept_stats(request):
     """
@@ -106,8 +106,10 @@ def dept_stats(request):
     :param request: Http request object
     :tye request: HttpRequest
     """
-
-    dept = request.POST.get('department')
+    if request.method == 'POST':
+        dept = request.POST.get('department', None)
+    else: # GET
+        dept = request.GET.get('department', None)
     cursor = connection.cursor()
 
     # user inputs nothing
@@ -122,12 +124,17 @@ def dept_stats(request):
         cursor.execute(query, (dept,))
     rows = cursor.fetchall()
 
+    # Paginate the results 10 per page
+    paginator = Paginator(rows, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     # Convert query results to dictionary for easier template rendering
     salarys = [
         {"dept_name": row[0], "min": row[1], "max": row[2], "average": row[3]}
-        for row in rows
+        for row in page_obj
     ]
-    return render(request, 'queries/F2Table.html', {'rows': salarys, 'group': group})
+    return render(request, 'queries/F2Table.html', {'page_obj': page_obj, 'rows': salarys, 'group': group})
 
 
 def F3(request):
