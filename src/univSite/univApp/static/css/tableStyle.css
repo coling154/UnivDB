@@ -16,16 +16,16 @@ a {
 a:hover, a:focus {
     color: rgba(4, 106, 56, 1);
 }
-.container {
+.container, .pagination{
     margin: 5% 3%;
 }
 @media (min-width: 48em) {
-    .container {
+    .container, .pagination{
         margin: 2%;
    }
 }
 @media (min-width: 75em) {
-    .container {
+    .container, .pagination{
         margin: 2em auto;
         max-width: 75em;
    }

@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
 from django.db import connection
 import hashlib
 import re
@@ -39,7 +40,7 @@ def F1(request):
     This view is used to display F1.html template
     """
     return render(request,"queries/F1.html", {"group": group})
-@require_http_methods(["POST"])
+@require_http_methods(["GET", "POST"])
 @csrf_exempt
 def list_instructors(request):
     """
@@ -52,8 +53,12 @@ def list_instructors(request):
     :param request: Http request object
     :tye request: HttpRequest
     """
-    order_by = request.POST.get('order')
-    asc_desc = request.POST.get('asc_desc').upper()
+    if request.method == 'POST':
+        order_by = request.POST.get('order', 'name')
+        asc_desc = request.POST.get('asc_desc', 'ASC').upper()
+    else:  # Default for GET requests
+        order_by = request.GET.get('order', 'name')
+        asc_desc = request.GET.get('asc_desc', 'ASC').upper()
     query = f"SELECT id, name, dept_name, salary FROM instructor ORDER BY {order_by} {asc_desc}"
     cursor = connection.cursor()
 
@@ -69,13 +74,18 @@ def list_instructors(request):
     cursor.execute(query)
     rows = cursor.fetchall()
 
+    # Paginate the results 10 per page
+    paginator = Paginator(rows, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     # Convert query results to dictionary to render template
     instructors = [
         {"id": row[0], "name": row[1], "dept_name": row[2], "salary": row[3]}
-        for row in rows
+        for row in page_obj
     ]
 
-    return render(request, 'queries/F1Table.html', {'rows': instructors, 'group': group})
+    return render(request, 'queries/F1Table.html', {'page_obj': page_obj, 'instructors': instructors, 'group': group})
 
 def F2(request):
     """

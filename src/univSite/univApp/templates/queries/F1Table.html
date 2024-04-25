@@ -22,12 +22,12 @@
                 </tr>
             </thead>
             <tbody>
-                {% for instructor in rows %}
+                {% for instructor in instructors %}
                 <tr>
                     <td scope="row" data-title="ID">{{ instructor.id }}</td>
                     <td data-title="Name">{{ instructor.name }}</td>
                     <td data-title="Department">{{ instructor.dept_name }}</td>
-                    <td data-title="Salary" type="currency">{{ instructor.salary }}</td>
+                    <td data-title="Salary">{{ instructor.salary }}</td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -37,22 +37,22 @@
             </tbody>
         </table>
     </div>
-</body>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    {% endif %}
+</div>
 {% else %}
-    <head>
-        <meta charset="UTF-8">
-        <title>Permission Denied</title>
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/alert.css' %}"/>
-        <link rel="icon" type="image/png" href="{% static 'images/favi.png' %}" />
-    </head>
-    <body>
-        <div class="container">
-            <div class="alert">
-                <strong>Access Denied!</strong> You do not have permission to access this page.
-            </div>
-            <a href="{% if group == 2%} {% url 'professor' %} {% elif group == 3%} {%url 'student'%} {% else %} {% url 'index' %}{% endif %}" class="button">Return Home</a>
-        </div>
-    </body>
+    <div class="alert">
+        <strong>Access Denied!</strong> You do not have permission to access this page.
+    </div>
+    <a href="{% url 'F1' %}" class="button">Return to F1</a> 
 {% endif %}
+    </body>
 </html>
