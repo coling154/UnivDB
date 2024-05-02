@@ -29,7 +29,7 @@ This would improve design since many tables have semester and year in their prim
 and Semester could be changed to an enumerated data type instead of 1 or 2
 
 ## How to start
-1. Create file `file.txt` in directory `UnivDB/univSite` in this file 
+1. Create file `file.txt` in directory `UnivDB/src/univSite/univSite` in this file 
 include your root password for MySQL
 2. Run init.sql with root privilege to initialise the database and load the testing data
 3. Run `./start.bat` to start server
